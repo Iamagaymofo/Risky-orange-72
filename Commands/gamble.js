@@ -15,37 +15,44 @@ export async function gamble(interaction, db) {
     if (chance <= 75) {
       winnings = 0;
     }
-    if (chance > 75 && chance <= 175) {
+    else if (chance > 75 && chance <= 175) {
       winnings = 0.3;
     }
-    if (chance > 175 && chance <= 285) {
+    else if (chance > 175 && chance <= 285) {
       winnings = 0.5;
     }
-    if (chance > 285 && chance <= 445) {
+    else if (chance > 285 && chance <= 445) {
       winnings = 0.75;
     }
-    if (chance > 445 && chance <= 550) {
+    else if (chance > 445 && chance <= 550) {
       winnings = 0.9;
     }
-    if (chance > 550 && chance <= 670) {
+    else if (chance > 550 && chance <= 670) {
       winnings = 1.35;
     }
-    if (chance > 670 && chance <= 800) {
+    else if (chance > 670 && chance <= 800) {
       winnings = 1.5;
     }
-    if (chance > 800 && chance <= 920) {
+    else if (chance > 800 && chance <= 920) {
       winnings = 1.8;
     } else {
       winnings = 2;
     }
 
-    db.get(`money-${userID}`).then((money) => {
-      if (gambleAmount > money) {
+    db.get(`money-${userID}`).then(async (money) => {
+      if (userChosenAmount > money) {
 		  // send something to the user
+		  const exampleEmbed = new EmbedBuilder()
+			.setColor("#2c2f33")
+			.setTitle("You don't have enough money!")
+			.setDescription("Get richer!")
+			.setFooter({ text: `${userDisplay} is running an error.` });
+		// -_-
+		  await interaction.reply({ embeds: [exampleEmbed] });
 		  return;
-		  
 	  }
-      let change = -userChosenAmount + userChosenAmount * winnings;
+
+      let change = -userChosenAmount + (userChosenAmount * winnings);
 
       db.set(`money-${userID}`, money + change).then(async () => {
         const exampleEmbed = new EmbedBuilder()

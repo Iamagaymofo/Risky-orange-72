@@ -1,17 +1,19 @@
+import Database from "@replit/database";
 import {
   REST,
   Routes,
   Client,
   GatewayIntentBits,
 } from "discord.js";
-import Database from "@replit/database";
 import { commandInfo as pingInfo, ping } from "./Commands/ping.js";
 import { commandInfo as moneyInfo, money } from "./Commands/money.js";
 import { commandInfo as gayInfo, gayrate} from "./Commands/gay.js";
 import { commandInfo as gambleInfo, gamble } from "./Commands/gamble.js";
-const db = new Database();
+import { commandInfo as bankInfo, bank } from "./Commands/bank.js";
+import { commandInfo as shopInfo, shop } from "./Commands/shop/shop.js";
 
-const commands = [pingInfo, moneyInfo, gayInfo, gambleInfo];
+const db = new Database();
+const commands = [pingInfo, moneyInfo, gayInfo, gambleInfo, bankInfo, await shopInfo(db)];
 
 // TOKEN and CLIENT_ID
 const TOKEN = process.env["Bot token"];
@@ -44,5 +46,7 @@ client.on("interactionCreate", async (interaction) => {
   money(interaction, db);
   gayrate(interaction);
   gamble(interaction, db);
+  bank(interaction,db)
+  shop(interaction, db)
 });
 client.login(TOKEN);
